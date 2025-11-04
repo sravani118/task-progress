@@ -1,0 +1,138 @@
+/* ===============================
+   🌙 AUTH PAGE (Perfect Center Alignment)
+================================= */
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #0f1116;
+}
+
+/* Wrapper centers everything */
+.auth-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #0f1116, #111318);
+  color: #e5e7eb;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  z-index: 9999; /* ensure it appears above sidebar */
+}
+
+/* Auth card box */
+.auth-box {
+  background-color: #1b1d23;
+  padding: 50px 60px;
+  border-radius: 14px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  width: 380px;
+  max-width: 90%;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Logo section */
+.auth-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.auth-logo img {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+}
+
+.auth-logo h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #3b82f6, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Title */
+.auth-box h3 {
+  margin-bottom: 25px;
+  color: #e5e7eb;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Input fields */
+.auth-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-box input {
+  background-color: #111318;
+  border: 1px solid #2b2f37;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.95rem;
+  color: #fff;
+  outline: none;
+  transition: border 0.25s ease;
+}
+
+.auth-box input:focus {
+  border-color: #3b82f6;
+}
+
+/* Button */
+.auth-box button {
+  background: linear-gradient(90deg, #2563eb, #22c55e);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.auth-box button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Bottom link */
+.auth-alt {
+  margin-top: 20px;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.auth-alt a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-alt a:hover {
+  text-decoration: underline;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

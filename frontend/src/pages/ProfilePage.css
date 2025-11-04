@@ -1,0 +1,59 @@
+/* =============================
+   PROFILE PAGE Styling
+============================= */
+
+.profile-container {
+  flex-grow: 1;
+  background-color: #0f1116;
+  color: #e5e7eb;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  background: linear-gradient(to right, #3b82f6, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.profile-card {
+  background-color: #1b1d23;
+  padding: 30px;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-card p {
+  margin: 0;
+  font-size: 1rem;
+  color: #e5e7eb;
+}
+
+.profile-card strong {
+  color: #60a5fa;
+}
+
+.profile-card button {
+  margin-top: 20px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #ef4444, #b91c1c);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.profile-card button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(to right, #dc2626, #7f1d1d);
+}

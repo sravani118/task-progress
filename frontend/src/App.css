@@ -1,0 +1,57 @@
+/* GLOBAL BASE (applies to all) */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: #e5e7eb;
+  background-color: #0f1116;
+}
+
+/* === AUTHENTICATED APP LAYOUT (Sidebar + Main) === */
+.app.sidebar-layout {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+  background-color: #0f1116;
+  color: #e5e7eb;
+  overflow: hidden;
+}
+
+/* MAIN AREA (LOGGED-IN ONLY) */
+.app.sidebar-layout .main {
+  flex: 1;
+  padding: 40px 50px;
+  background-color: #111318;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* === PUBLIC PAGES (HomePage, Login, Signup) === */
+.app.public-layout {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0f1116, #111318);
+}
+
+.app.public-layout .main--public {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #2b2f37;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3b3f47;
+}

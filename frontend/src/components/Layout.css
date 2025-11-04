@@ -1,0 +1,36 @@
+.app-layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #0f1116;
+}
+
+/* When sidebar is fixed, main content must shift right */
+.main-content {
+  flex-grow: 1;
+  background: #111318;
+  padding: 40px 50px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  margin-left: 250px; /* ✅ Matches sidebar width */
+  transition: margin-left 0.3s ease; /* Smooth when collapsed */
+}
+
+/* When sidebar is collapsed */
+.app-layout.collapsed .main-content {
+  margin-left: 80px; /* ✅ Adjust for collapsed width */
+}
+
+/* Scrollbar styling */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+.main-content::-webkit-scrollbar-thumb {
+  background: #2b2f37;
+  border-radius: 4px;
+}
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: #3b3f47;
+}

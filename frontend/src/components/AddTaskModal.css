@@ -1,0 +1,179 @@
+/* ==============================
+   Add Task Modal (Modern Dark UI)
+============================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 17, 22, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal Container */
+.modal {
+  background: linear-gradient(145deg, #1b1d23, #15171c);
+  padding: 28px 30px;
+  border-radius: 14px;
+  width: 420px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e5e7eb;
+  animation: slideUp 0.3s ease;
+}
+
+/* Title */
+.modal h2 {
+  margin-bottom: 18px;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  background: linear-gradient(90deg, #60a5fa, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Input Fields */
+.modal input,
+.modal textarea,
+.modal select {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: #111318;
+  color: #fff;
+  border: 1px solid #2b2f37;
+  border-radius: 8px;
+  margin: 8px 0 14px 0;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Priority-based select colors */
+.modal select[name="priority"] option[value="low"] {
+  color: #22c55e;
+}
+.modal select[name="priority"] option[value="medium"] {
+  color: #facc15;
+}
+.modal select[name="priority"] option[value="high"] {
+  color: #ef4444;
+}
+
+/* Label rows */
+.form-row {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row label {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+/* ===============================
+   Modal Buttons Section
+================================ */
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.save-btn,
+.draft-btn,
+.cancel-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+/* ✅ Add Task Button (Blue) */
+.save-btn {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.save-btn:hover {
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  transform: translateY(-2px);
+}
+
+/* 📝 Draft Button (Gray/Neutral) */
+.draft-btn {
+  background: linear-gradient(90deg, #6b7280, #4b5563);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(107, 114, 128, 0.3);
+}
+
+.draft-btn:hover {
+  background: linear-gradient(90deg, #4b5563, #374151);
+  transform: translateY(-2px);
+}
+
+/* ❌ Cancel Button (Red) */
+.cancel-btn {
+  background: linear-gradient(90deg, #ef4444, #b91c1c);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
+}
+
+.cancel-btn:hover {
+  background: linear-gradient(90deg, #dc2626, #991b1b);
+  transform: translateY(-2px);
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Modal */
+@media (max-width: 500px) {
+  .modal {
+    width: 90%;
+    padding: 20px;
+  }
+}
