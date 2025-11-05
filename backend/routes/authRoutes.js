@@ -5,15 +5,6 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// Handle preflight requests for all auth routes
-router.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://task-progress.netlify.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.sendStatus(200);
-});
-
 /**
  * ===============================
  * 🧩 USER SIGNUP
