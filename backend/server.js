@@ -8,20 +8,12 @@ import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 const app = express();
 
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cors from "cors";
-import taskRoutes from "./routes/taskRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-
-dotenv.config();
-const app = express();
-
-// ✅ CORS configuration
+// ===============================
+// 🧩 CORS CONFIGURATION
+// ===============================
 const allowedOrigins = [
   "https://task-progress.netlify.app",
-  "http://localhost:5173"
+  "http://localhost:5173" // for local testing
 ];
 
 const corsOptions = {
@@ -35,61 +27,71 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
 
-// ✅ Apply CORS globally
+// ✅ Apply CORS before any routes
 app.use(cors(corsOptions));
 
-// ✅ Handle preflight requests globally (Express 5 fix)
+// ✅ Handle all preflight requests globally (Express 5 syntax)
 app.options(/.*/, cors(corsOptions));
 
+// ✅ Parse incoming JSON
 app.use(express.json());
 
-
-// Parse JSON bodies
-app.use(express.json());
-
-// ✅ Connect to MongoDB
+// ===============================
+// 🚀 DATABASE CONNECTION
+// ===============================
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB error:", err));
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// ✅ Routes
+// ===============================
+// 🧭 ROUTES
+// ===============================
 app.get("/", (req, res) => {
-  res.send("TaskFlow API running 🚀");
+  res.send("Task Progress API running 🚀");
 });
 
 app.use("/api/tasks", taskRoutes);
 app.use("/api/auth", authRoutes);
 
-// ✅ Log all requests
+// ✅ Test route to check CORS
+app.get("/test-cors", (req, res) => {
+  res.json({ message: "CORS working ✅" });
+});
+
+// ===============================
+// ⚙️ FALLBACK CORS HEADERS
+// ===============================
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  res.header("Access-Control-Allow-Origin", "https://task-progress.netlify.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
 
-// ✅ Error handler
+// ===============================
+// 🧯 ERROR HANDLING
+// ===============================
 app.use((err, req, res, next) => {
-  console.error(`${new Date().toISOString()} - Error:`, err);
-
+  console.error("❌ Error:", err.message);
   if (err.name === "UnauthorizedError") {
-    return res.status(401).json({
-      message: "Invalid token or no token provided",
-    });
+    return res.status(401).json({ message: "Invalid token" });
   }
-
-  res.status(err.status || 500).json({
-    message: err.message || "Internal Server Error",
-  });
+  res.status(500).json({ message: err.message || "Internal Server Error" });
 });
 
-// ✅ Handle 404
+// ===============================
+// 🚫 404 HANDLER
+// ===============================
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// ✅ Start server
+// ===============================
+// 🚀 START SERVER
+// ===============================
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
