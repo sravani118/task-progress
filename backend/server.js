@@ -8,29 +8,44 @@ import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 const app = express();
 
-// ✅ CORS Configuration
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+import taskRoutes from "./routes/taskRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+
+dotenv.config();
+const app = express();
+
+// ✅ CORS configuration
 const allowedOrigins = [
   "https://task-progress.netlify.app",
-  "http://localhost:5173" // optional, for local testing
+  "http://localhost:5173"
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
 
-// ✅ Handle all OPTIONS preflight requests globally
-app.options(/.*/, cors());
+// ✅ Apply CORS globally
+app.use(cors(corsOptions));
+
+// ✅ Handle preflight requests globally (Express 5 fix)
+app.options(/.*/, cors(corsOptions));
+
+app.use(express.json());
+
 
 // Parse JSON bodies
 app.use(express.json());
