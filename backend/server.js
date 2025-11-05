@@ -9,35 +9,31 @@ import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 const app = express();
 
-// Log incoming requests for debugging
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  console.log('Origin:', req.headers.origin);
-  next();
+// Add headers before the routes are defined
+app.use(function (req, res, next) {
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'https://task-progress.netlify.app');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    // Handle OPTIONS method
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+
+    next();
 });
 
-// CORS configuration
-app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    const allowedOrigins = [
-      'https://task-progress.netlify.app',
-      'http://localhost:5173',
-      'http://127.0.0.1:5173'
-    ];
-    
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
+// Regular middleware
+app.use(cors());  // Keep this as fallback
 app.use(express.json());
 
 mongoose
