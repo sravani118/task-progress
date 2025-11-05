@@ -18,7 +18,7 @@ const TodoPage = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
       const todoTasks = res.data.filter((t) => t.status === "todo");
       setTasks(todoTasks);
     } catch (error) {
@@ -98,3 +98,4 @@ const TodoPage = () => {
 };
 
 export default TodoPage;
+

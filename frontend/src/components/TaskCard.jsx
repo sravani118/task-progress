@@ -6,13 +6,13 @@ import { FaTrash, FaCheck, FaRedoAlt, FaClipboardList } from "react-icons/fa";
 const TaskCard = ({ task, onUpdate }) => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this task?")) {
-      await axios.delete(`http://localhost:5000/api/tasks/${task._id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/tasks/${task._id}`);
       onUpdate(); // Refresh tasks
     }
   };
 
   const handleMove = async (newStatus) => {
-    await axios.put(`http://localhost:5000/api/tasks/${task._id}`, {
+    await axios.put(`${import.meta.env.VITE_API_URL}/api/tasks/${task._id}`, {
       ...task,
       status: newStatus,
     });

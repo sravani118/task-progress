@@ -18,7 +18,7 @@ const TodayPage = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       
@@ -107,3 +107,4 @@ const TodayPage = () => {
 };
 
 export default TodayPage;
+

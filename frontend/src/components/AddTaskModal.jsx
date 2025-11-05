@@ -21,7 +21,7 @@ const AddTaskModal = ({ onClose }) => {
   const handleAddTask = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/tasks", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/tasks`, {
         ...task,
         isDraft: false,
       });
@@ -39,7 +39,7 @@ const AddTaskModal = ({ onClose }) => {
   const handleSaveDraft = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/tasks", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/tasks`, {
         ...task,
         isDraft: true,
       });

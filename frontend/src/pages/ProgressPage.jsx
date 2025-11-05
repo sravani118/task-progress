@@ -17,7 +17,7 @@ const ProgressPage = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
       const all = res.data.filter((t) => !t.isDraft);
       setStats({
         total: all.length,
@@ -128,3 +128,4 @@ const ProgressPage = () => {
 };
 
 export default ProgressPage;
+

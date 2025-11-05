@@ -18,7 +18,7 @@ const InProgressPage = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
       const inProgressTasks = res.data.filter((t) => t.status === "inprogress");
       setTasks(inProgressTasks);
     } catch (error) {
@@ -98,3 +98,4 @@ const InProgressPage = () => {
 };
 
 export default InProgressPage;
+

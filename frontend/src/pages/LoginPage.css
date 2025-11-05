@@ -75,6 +75,13 @@ html, body {
   gap: 15px;
 }
 
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: left;
+}
+
 .auth-box input {
   background-color: #111318;
   border: 1px solid #2b2f37;
@@ -83,11 +90,29 @@ html, body {
   font-size: 0.95rem;
   color: #fff;
   outline: none;
-  transition: border 0.25s ease;
+  transition: all 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .auth-box input:focus {
   border-color: #3b82f6;
+}
+
+.auth-box input.error {
+  border-color: #ef4444;
+}
+
+.auth-box input.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  text-align: left;
 }
 
 /* Button */

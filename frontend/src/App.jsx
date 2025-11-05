@@ -11,6 +11,7 @@ import DraftsPage from "./pages/DraftsPage";
 import TodayPage from "./pages/TodayPage";
 import UpcomingPage from "./pages/UpcomingPage";
 import ProgressPage from "./pages/ProgressPage";
+import ProfilePage from "./pages/ProfilePage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -59,7 +60,7 @@ function App() {
             path="/*"
             element={
               <div className="app sidebar-layout">
-                {/* <Sidebar /> */}
+                <Sidebar />
                 <main className="main">
                   <Routes>
                     <Route path="/dashboard" element={<Dashboard />} />
@@ -71,6 +72,7 @@ function App() {
                     <Route path="/today" element={<TodayPage />} />
                     <Route path="/upcoming" element={<UpcomingPage />} />
                     <Route path="/progress" element={<ProgressPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
                   </Routes>
                 </main>
               </div>
