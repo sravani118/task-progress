@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/api";
 import { useNavigate } from "react-router-dom";
-import Layout from "../components/Layout";
 import { useModal } from "../contexts/ModalContext";
 import "./Dashboard.css";
 
@@ -21,8 +20,8 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
-      const tasks = res.data;
+      const res = await api.get('/api/tasks');
+      const tasks = res.data.tasks || res.data; // Support both formats
       setStats({
         total: tasks.length,
         todo: tasks.filter((t) => t.status === "todo").length,
@@ -38,9 +37,13 @@ const Dashboard = () => {
     navigate(route);
   };
 
+  const handleTaskAdded = () => {
+    // Refresh stats when a new task is added
+    fetchTasks();
+  };
+
   return (
-    <Layout>
-      <div className="dashboard">
+    <div className="dashboard">
         <div className="dashboard-header">
           <h1>Dashboard</h1>
           <button className="add-btn" onClick={openModal}>
@@ -67,7 +70,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </Layout>
   );
 };
 

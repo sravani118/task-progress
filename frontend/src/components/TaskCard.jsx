@@ -1,18 +1,31 @@
-import React from "react";
-import axios from "axios";
+import React, { useState, useRef, useEffect } from "react";
+import api from "../config/api";
 import "./TaskCard.css";
-import { FaTrash, FaCheck, FaRedoAlt, FaClipboardList } from "react-icons/fa";
+import { FaTrash, FaCheck, FaRedoAlt, FaClipboardList, FaEllipsisV } from "react-icons/fa";
 
 const TaskCard = ({ task, onUpdate }) => {
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this task?")) {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/tasks/${task._id}`);
+      await api.delete(`/api/tasks/${task._id}`);
       onUpdate(); // Refresh tasks
     }
   };
 
   const handleMove = async (newStatus) => {
-    await axios.put(`${import.meta.env.VITE_API_URL}/api/tasks/${task._id}`, {
+    await api.put(`/api/tasks/${task._id}`, {
       ...task,
       status: newStatus,
     });
@@ -42,34 +55,48 @@ const TaskCard = ({ task, onUpdate }) => {
         </small>
       </div>
 
-      <div className="task-actions">
-        {task.status !== "todo" && (
-          <button className="todo-btn" onClick={() => handleMove("todo")}>
-            <FaClipboardList className="icon" /> To Do
-          </button>
-        )}
-
-        {task.status !== "inprogress" && (
-          <button
-            className="inprogress-btn"
-            onClick={() => handleMove("inprogress")}
-          >
-            <FaRedoAlt className="icon" /> In Progress
-          </button>
-        )}
-
-        {task.status !== "completed" && (
-          <button
-            className="complete-btn"
-            onClick={() => handleMove("completed")}
-          >
-            <FaCheck className="icon" /> Complete
-          </button>
-        )}
-
-        <button className="delete-btn" onClick={handleDelete}>
-          <FaTrash className="icon" /> Delete
+      <div className="task-actions" ref={menuRef}>
+        <button className="menu-btn" onClick={() => setShowMenu(!showMenu)}>
+          <FaEllipsisV className="icon" />
         </button>
+        
+        {showMenu && (
+          <div className="task-menu">
+            {task.status !== "todo" && (
+              <button onClick={() => {
+                handleMove("todo");
+                setShowMenu(false);
+              }}>
+                <FaClipboardList className="icon" /> To Do
+              </button>
+            )}
+
+            {task.status !== "inprogress" && (
+              <button onClick={() => {
+                handleMove("inprogress");
+                setShowMenu(false);
+              }}>
+                <FaRedoAlt className="icon" /> In Progress
+              </button>
+            )}
+
+            {task.status !== "completed" && (
+              <button onClick={() => {
+                handleMove("completed");
+                setShowMenu(false);
+              }}>
+                <FaCheck className="icon" /> Complete
+              </button>
+            )}
+
+            <button onClick={() => {
+              handleDelete();
+              setShowMenu(false);
+            }}>
+              <FaTrash className="icon" /> Delete
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

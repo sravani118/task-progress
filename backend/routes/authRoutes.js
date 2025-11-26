@@ -11,6 +11,9 @@ const router = express.Router();
  * ===============================
  */
 router.post("/signup", async (req, res) => {
+  console.log('📝 Signup request received');
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
   try {
     const { name, email, password } = req.body;
 
@@ -20,10 +23,11 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Validate email format (must include .com)
-    if (!email.includes('gmail.com')) {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       console.log("⚠️ Invalid email format:", email);
-      return res.status(400).json({ message: "Email must include gmail.com domain" });
+      return res.status(400).json({ message: "Please enter a valid email address" });
     }
 
     // Validate password length
@@ -73,10 +77,11 @@ router.post("/login", async (req, res) => {
         .json({ message: "Email and password are required" });
     }
 
-    // Validate email format (must include .com)
-    if (!email.includes('gmail.com')) {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       console.log("⚠️ Invalid email format:", email);
-      return res.status(400).json({ message: "Email must include gmail.com domain" });
+      return res.status(400).json({ message: "Please enter a valid email address" });
     }
 
     // Validate password length

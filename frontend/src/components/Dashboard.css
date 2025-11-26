@@ -136,7 +136,17 @@
 .stat-card.completed:hover::before { background-color: #7e22ce; }
 
 /* ===============================
-   📱 RESPONSIVE
+   � TASKS GRID
+================================= */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+}
+
+/* ===============================
+   �📱 RESPONSIVE
 ================================= */
 @media (max-width: 900px) {
   .dashboard-header h1 {
@@ -145,5 +155,9 @@
 
   .stats-container {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .tasks-grid {
+    grid-template-columns: 1fr;
   }
 }

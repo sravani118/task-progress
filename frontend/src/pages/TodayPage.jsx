@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/api";
 import TaskCard from "../components/TaskCard";
-import Layout from "../components/Layout";
 import { useModal } from "../contexts/ModalContext";
 import "./TodayPage.css";
 
@@ -14,46 +13,29 @@ const TodayPage = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [search, filterPriority, sortOrder]);
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
-      const todayTasks = res.data.filter((task) => {
-        const taskDate = new Date(task.dueDate);
-        taskDate.setHours(0, 0, 0, 0);
-        return taskDate.getTime() === today.getTime();
+      const params = new URLSearchParams({
+        dateFilter: 'today',
+        sortBy: 'priority',
+        sortOrder: sortOrder
       });
       
-      setTasks(todayTasks);
+      if (search) params.append('search', search);
+      if (filterPriority !== 'all') params.append('priority', filterPriority);
+      
+      const res = await api.get(`/api/tasks?${params.toString()}`);
+      const data = res.data.tasks || res.data;
+      setTasks(data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
 
-  const filteredTasks = tasks
-    .filter((task) => {
-      const matchSearch =
-        task.title.toLowerCase().includes(search.toLowerCase()) ||
-        task.description.toLowerCase().includes(search.toLowerCase());
-      const matchPriority =
-        filterPriority === "all" || task.priority === filterPriority;
-      return matchSearch && matchPriority;
-    })
-    .sort((a, b) => {
-      if (!a.priority || !b.priority) return 0;
-      const order = { high: 1, medium: 2, low: 3 };
-      return sortOrder === "asc" 
-        ? order[a.priority] - order[b.priority]
-        : order[b.priority] - order[a.priority];
-    });
-
   return (
-    <Layout>
-      <div className="today-page">
+    <div className="today-page">
         {/* Header Section */}
         <div className="today-header">
           <div className="left">
@@ -93,8 +75,8 @@ const TodayPage = () => {
 
         {/* Task List */}
         <div className="task-list">
-          {filteredTasks.length > 0 ? (
-            filteredTasks.map((task) => (
+          {tasks.length > 0 ? (
+            tasks.map((task) => (
               <TaskCard key={task._id} task={task} onUpdate={fetchTasks} />
             ))
           ) : (
@@ -102,7 +84,6 @@ const TodayPage = () => {
           )}
         </div>
       </div>
-    </Layout>
   );
 };
 

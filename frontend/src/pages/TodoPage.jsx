@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/api";
 import TaskCard from "../components/TaskCard";
-import Layout from "../components/Layout";
 import { useModal } from "../contexts/ModalContext";
 import "./TodoPage.css";
 
@@ -14,37 +13,31 @@ const TodoPage = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [search, filterPriority, sortOrder]); // Re-fetch when filters change
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
-      const todoTasks = res.data.filter((t) => t.status === "todo");
-      setTasks(todoTasks);
+      // Build query parameters
+      const params = new URLSearchParams({
+        status: 'todo',
+        sortBy: 'dueDate',
+        sortOrder: sortOrder
+      });
+      
+      // Add optional filters
+      if (search) params.append('search', search);
+      if (filterPriority !== 'all') params.append('priority', filterPriority);
+      
+      const res = await api.get(`/api/tasks?${params.toString()}`);
+      const data = res.data.tasks || res.data; // Support both formats
+      setTasks(data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
 
-  const filteredTasks = tasks
-    .filter((task) => {
-      const matchSearch =
-        task.title.toLowerCase().includes(search.toLowerCase()) ||
-        task.description.toLowerCase().includes(search.toLowerCase());
-      const matchPriority =
-        filterPriority === "all" || task.priority === filterPriority;
-      return matchSearch && matchPriority;
-    })
-    .sort((a, b) => {
-      if (!a.dueDate || !b.dueDate) return 0;
-      const dateA = new Date(a.dueDate);
-      const dateB = new Date(b.dueDate);
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    });
-
   return (
-    <Layout>
-      <div className="todo-page">
+    <div className="todo-page">
         {/* Header Section */}
         <div className="todo-header">
           <div className="left">
@@ -84,8 +77,8 @@ const TodoPage = () => {
 
         {/* Task List */}
         <div className="task-list">
-          {filteredTasks.length > 0 ? (
-            filteredTasks.map((task) => (
+          {tasks.length > 0 ? (
+            tasks.map((task) => (
               <TaskCard key={task._id} task={task} onUpdate={fetchTasks} />
             ))
           ) : (
@@ -93,7 +86,6 @@ const TodoPage = () => {
           )}
         </div>
       </div>
-    </Layout>
   );
 };
 

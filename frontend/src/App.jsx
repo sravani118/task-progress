@@ -1,8 +1,9 @@
 // src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
+import Layout from "./components/Layout";
 import Dashboard from "./components/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 import TotalTasksPage from "./pages/TotalTasksPage";
 import TodoListPage from "./pages/TodoPage"; // ✅ Use actual filename
 import InProgressPage from "./pages/InProgressPage";
@@ -55,13 +56,12 @@ function App() {
             }
           />
 
-          {/* === DASHBOARD & SIDEBAR PAGES === */}
+          {/* === DASHBOARD & SIDEBAR PAGES (Protected) === */}
           <Route
             path="/*"
             element={
-              <div className="app sidebar-layout">
-                <Sidebar />
-                <main className="main">
+              <ProtectedRoute>
+                <Layout>
                   <Routes>
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/total-tasks" element={<TotalTasksPage />} />
@@ -74,8 +74,8 @@ function App() {
                     <Route path="/progress" element={<ProgressPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                   </Routes>
-                </main>
-              </div>
+                </Layout>
+              </ProtectedRoute>
             }
           />
         </Routes>

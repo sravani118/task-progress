@@ -15,7 +15,7 @@ const HomePage = () => {
             alt="logo"
             className="home-logo-icon"
           />
-          <h2>TaskProgesser</h2>
+          <h2>TaskProgresser</h2>
         </div>
 
         <nav className="home-nav">

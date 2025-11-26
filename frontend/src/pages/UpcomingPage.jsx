@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/api";
 import TaskCard from "../components/TaskCard";
-import Layout from "../components/Layout";
 import { useModal } from "../contexts/ModalContext";
 import "./UpcomingPage.css";
 
@@ -14,46 +13,30 @@ const UpcomingPage = () => {
 
   useEffect(() => {
     fetchUpcoming();
-  }, []);
+  }, [search, filterPriority, sortOrder]);
 
   const fetchUpcoming = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const params = new URLSearchParams({
+        dateFilter: 'upcoming',
+        isDraft: 'false',
+        sortBy: 'dueDate',
+        sortOrder: sortOrder
+      });
       
-      const upcomingTasks = res.data.filter(
-        (task) =>
-          task.dueDate &&
-          new Date(task.dueDate) > today &&
-          !task.isDraft
-      );
+      if (search) params.append('search', search);
+      if (filterPriority !== 'all') params.append('priority', filterPriority);
       
-      setTasks(upcomingTasks);
+      const res = await api.get(`/api/tasks?${params.toString()}`);
+      const data = res.data.tasks || res.data;
+      setTasks(data);
     } catch (error) {
       console.error("Error fetching upcoming tasks:", error);
     }
   };
 
-  const filteredTasks = tasks
-    .filter((task) => {
-      const matchSearch =
-        task.title.toLowerCase().includes(search.toLowerCase()) ||
-        task.description.toLowerCase().includes(search.toLowerCase());
-      const matchPriority =
-        filterPriority === "all" || task.priority === filterPriority;
-      return matchSearch && matchPriority;
-    })
-    .sort((a, b) => {
-      if (!a.dueDate || !b.dueDate) return 0;
-      const dateA = new Date(a.dueDate);
-      const dateB = new Date(b.dueDate);
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    });
-
   return (
-    <Layout>
-      <div className="upcoming-page">
+    <div className="upcoming-page">
         {/* Header Section */}
         <div className="upcoming-header">
           <div className="left">
@@ -93,8 +76,8 @@ const UpcomingPage = () => {
 
         {/* Task List */}
         <div className="task-list">
-          {filteredTasks.length > 0 ? (
-            filteredTasks.map((task) => (
+          {tasks.length > 0 ? (
+            tasks.map((task) => (
               <TaskCard key={task._id} task={task} onUpdate={fetchUpcoming} />
             ))
           ) : (
@@ -102,7 +85,6 @@ const UpcomingPage = () => {
           )}
         </div>
       </div>
-    </Layout>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Layout from "../components/Layout";
+import api from "../config/api";
 import "./ProgressPage.css";
 
 const ProgressPage = () => {
@@ -17,8 +16,8 @@ const ProgressPage = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
-      const all = res.data.filter((t) => !t.isDraft);
+      const res = await api.get('/api/tasks');
+      const all = (res.data.tasks || res.data).filter((t) => !t.isDraft);
       setStats({
         total: all.length,
         todo: all.filter((t) => t.status === "todo").length,
@@ -34,8 +33,7 @@ const ProgressPage = () => {
     stats.total === 0 ? 0 : Math.round((stats.completed / stats.total) * 100);
 
   return (
-    <Layout>
-      <div className="progress-page">
+    <div className="progress-page">
         {/* Header Section */}
         <div className="progress-header">
           <div className="left">
@@ -123,7 +121,6 @@ const ProgressPage = () => {
           </div>
         </div>
       </div>
-    </Layout>
   );
 };
 

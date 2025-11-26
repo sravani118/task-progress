@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../config/api";
 import { FaPlus, FaSave, FaTimes } from "react-icons/fa";
 import "./AddTaskModal.css";
 
-const AddTaskModal = ({ onClose }) => {
+const AddTaskModal = ({ onClose, onTaskAdded }) => {
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -11,6 +11,7 @@ const AddTaskModal = ({ onClose }) => {
     priority: "medium",
     dueDate: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,36 +21,62 @@ const AddTaskModal = ({ onClose }) => {
   // ✅ Handle Add Task
   const handleAddTask = async (e) => {
     e.preventDefault();
+    if (!task.title.trim()) {
+      alert("Please enter a task title");
+      return;
+    }
+    
+    setLoading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/tasks`, {
+      const response = await api.post('/api/tasks', {
         ...task,
         isDraft: false,
       });
       console.log("✅ Task added:", response.data);
-      alert("Task added successfully!");
+      
+      // Notify parent component to refresh data
+      if (onTaskAdded) {
+        onTaskAdded(response.data);
+      }
+      
       onClose();
-      window.location.reload();
+      // Remove window.location.reload()
     } catch (error) {
       console.error("❌ Error adding task:", error);
-      alert("Failed to add task. Please try again.");
+      alert(error.response?.data?.message || "Failed to add task. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   // ✅ Handle Save Draft
   const handleSaveDraft = async (e) => {
     e.preventDefault();
+    if (!task.title.trim()) {
+      alert("Please enter a task title");
+      return;
+    }
+    
+    setLoading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/tasks`, {
+      const response = await api.post('/api/tasks', {
         ...task,
         isDraft: true,
       });
       console.log("📝 Draft saved:", response.data);
-      alert("Draft saved successfully!");
+      
+      // Notify parent component to refresh data
+      if (onTaskAdded) {
+        onTaskAdded(response.data);
+      }
+      
       onClose();
-      window.location.reload();
+      // Remove window.location.reload()
     } catch (error) {
       console.error("❌ Error saving draft:", error);
-      alert("Failed to save draft. Please try again.");
+      alert(error.response?.data?.message || "Failed to save draft. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,13 +134,26 @@ const AddTaskModal = ({ onClose }) => {
           </div>
 
           <div className="modal-actions">
-            <button className="save-btn" onClick={handleAddTask}>
-              <FaPlus /> Add Task
+            <button 
+              className="save-btn" 
+              onClick={handleAddTask}
+              disabled={loading}
+            >
+              <FaPlus /> {loading ? "Adding..." : "Add Task"}
             </button>
-            <button className="draft-btn" onClick={handleSaveDraft}>
-              <FaSave /> Save Draft
+            <button 
+              className="draft-btn" 
+              onClick={handleSaveDraft}
+              disabled={loading}
+            >
+              <FaSave /> {loading ? "Saving..." : "Save Draft"}
             </button>
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button 
+              type="button" 
+              className="cancel-btn" 
+              onClick={onClose}
+              disabled={loading}
+            >
               <FaTimes /> Cancel
             </button>
           </div>

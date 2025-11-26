@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./SignupPage.css";
 
 const SignupPage = () => {
@@ -11,6 +12,7 @@ const SignupPage = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
@@ -88,14 +90,23 @@ const SignupPage = () => {
           </div>
 
           <div className="form-group">
-            <input
-              name="password"
-              type="password"
-              placeholder="Password (min. 6 characters)"
-              value={form.password}
-              onChange={handleChange}
-              className={errors.password ? "error" : ""}
-            />
+            <div className="password-group">
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password (min. 6 characters)"
+                value={form.password}
+                onChange={handleChange}
+                className={errors.password ? "error" : ""}
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
 

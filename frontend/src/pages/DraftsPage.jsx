@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/api";
 import TaskCard from "../components/TaskCard";
-import Layout from "../components/Layout";
 import { useModal } from "../contexts/ModalContext";
 import "./DraftsPage.css";
 
@@ -14,32 +13,29 @@ const DraftsPage = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [search, filterPriority, sortOrder]);
 
   const fetchTasks = async () => {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/tasks`);
-    setTasks(res.data.filter((t) => t.isDraft));
+    try {
+      const params = new URLSearchParams({
+        isDraft: 'true',
+        sortBy: 'dueDate',
+        sortOrder: sortOrder
+      });
+      
+      if (search) params.append('search', search);
+      if (filterPriority !== 'all') params.append('priority', filterPriority);
+      
+      const res = await api.get(`/api/tasks?${params.toString()}`);
+      const data = res.data.tasks || res.data;
+      setTasks(data);
+    } catch (error) {
+      console.error("Error fetching drafts:", error);
+    }
   };
 
-  const filteredTasks = tasks
-    .filter((task) => {
-      const matchSearch =
-        task.title.toLowerCase().includes(search.toLowerCase()) ||
-        task.description.toLowerCase().includes(search.toLowerCase());
-      const matchPriority =
-        filterPriority === "all" || task.priority === filterPriority;
-      return matchSearch && matchPriority;
-    })
-    .sort((a, b) => {
-      if (!a.dueDate || !b.dueDate) return 0;
-      const dateA = new Date(a.dueDate);
-      const dateB = new Date(b.dueDate);
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    });
-
   return (
-    <Layout>
-      <div className="drafts-page">
+    <div className="drafts-page">
         {/* Header Section */}
         <div className="drafts-header">
           <div className="left">
@@ -79,8 +75,8 @@ const DraftsPage = () => {
 
         {/* Task List */}
         <div className="task-list">
-          {filteredTasks.length > 0 ? (
-            filteredTasks.map((task) => (
+          {tasks.length > 0 ? (
+            tasks.map((task) => (
               <TaskCard key={task._id} task={task} onUpdate={fetchTasks} />
             ))
           ) : (
@@ -88,7 +84,6 @@ const DraftsPage = () => {
           )}
         </div>
       </div>
-    </Layout>
   );
 };
 

@@ -53,6 +53,12 @@
   transition: all 0.25s ease;
 }
 
+/* Date input calendar icon color - white icon only */
+.modal input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
 .modal input:focus,
 .modal textarea:focus,
 .modal select:focus {
