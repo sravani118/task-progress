@@ -8,7 +8,6 @@ import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 const app = express();
 
-<<<<<<< HEAD
 // Configure CORS
 app.use(cors({
   origin: 'https://task-progress.netlify.app',
@@ -26,42 +25,6 @@ app.use((req, res, next) => {
   next();
 });
 
-=======
-// ===============================
-// 🧩 CORS CONFIGURATION
-// ===============================
-const allowedOrigins = [
-  "https://task-progress.netlify.app",
-  "http://localhost:5173" // for local testing
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
-
-// ✅ Apply CORS before any routes
-app.use(cors(corsOptions));
-
-// ✅ Handle all preflight requests globally (Express 5 syntax)
-app.options(/.*/, cors(corsOptions));
-
-// ✅ Parse incoming JSON
-app.use(express.json());
-
-// ===============================
-// 🚀 DATABASE CONNECTION
-// ===============================
->>>>>>> c203618bb0053c56b9e9c863743e06352b02beb5
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
@@ -77,7 +40,6 @@ app.get("/", (req, res) => {
 app.use("/api/tasks", taskRoutes);
 app.use("/api/auth", authRoutes);
 
-<<<<<<< HEAD
 // Handle 404 - MUST be before error handler
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
@@ -97,11 +59,6 @@ app.use((err, req, res, next) => {
     message: err.message || 'Internal Server Error',
     error: process.env.NODE_ENV === 'development' ? err : {}
   });
-=======
-// ✅ Test route to check CORS
-app.get("/test-cors", (req, res) => {
-  res.json({ message: "CORS working ✅" });
->>>>>>> c203618bb0053c56b9e9c863743e06352b02beb5
 });
 
 // ===============================
